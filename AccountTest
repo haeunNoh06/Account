@@ -1,0 +1,115 @@
+package work;
+
+import java.util.Scanner;
+
+class Account {
+	static int cnt = 1;
+	private String acc_Num;
+	private int nowMoney = 0;
+	
+	public Account(String acc_num) {
+		this.setAcc_Num(acc_num);
+		cnt++;
+	}
+	
+	//입금
+	void deposit(int money) {
+		this.setNowMoney(this.getNowMoney() + money);
+	}
+	
+	//출금
+	void withdraw(int money) {
+		this.setNowMoney(this.getNowMoney() - money);
+	}
+	
+	//현재 계좌 상태 출력
+	public String toString() {
+		return "계좌 번호 "+this.getAcc_Num()+"의 잔액은 "+this.getNowMoney()+"입니다.";
+	}
+
+	//setter, getter 메서드
+	//계좌 번호
+	public String getAcc_Num() {
+		return acc_Num;
+	}
+	public void setAcc_Num(String acc_Num) {
+		this.acc_Num = acc_Num;
+	}
+
+	//현재 잔액
+	public int getNowMoney() {
+		return nowMoney;
+	}
+	public void setNowMoney(int nowMoney) {
+		this.nowMoney = nowMoney;
+	}
+}
+
+public class AcocuntTest {
+	static int cnt1 = -1;
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		
+		System.out.print("생성할 계좌의 개수 입력 : ");
+		int account = sc.nextInt();
+		Account[] a = new Account[account];
+		System.out.println();
+		
+//		int[] cnt = new int[account]; 		//몇 번째 계좌인지 알려주는 cnt변수
+		
+		while(true) {
+			System.out.println("1. 계좌 생성   2. 입금   3. 출금   4. 현재계좌상태   0. 종료");
+			System.out.print("메뉴입력 : ");
+			int menu = sc.nextInt();
+			System.out.println();
+			
+			//계좌번호 입력
+			if ( menu == 1 ) {
+				cnt1++;
+				System.out.print(a[cnt1].cnt+" 계좌번호 입력 : ");			//첫 번째로 계좌를 생성하면 0번쨰의 방의 a의 Account에 들어있는 cnt번째 계좌번호 출력
+				a[cnt1] = new Account(sc.next());						//계좌번호 입력 부분
+				System.out.println(a[cnt1].toString()+"\n");					//첫 번째로 생성한 계좌의 방 번호를 ++함으로써 첫 번째로 생성한 계좌는 남겨두고 두 번쨰 계좌 생성 가능
+				
+			//입금
+			} else if ( menu == 2 ) {
+				System.out.print("입금할 계좌번호 입력 : ");
+				String acc_num = sc.next();
+				if ( a[cnt1].getAcc_Num().equals(acc_num)) {
+					System.out.print("입금 금액 입력 : ");
+					int money = sc.nextInt();
+					a[cnt1].deposit(money);
+					System.out.println();
+				}
+				else 
+					System.out.println("잘못된 계좌번호입니다.\n");
+			
+			//출금
+			} else if ( menu == 3 ) {
+				int money;		//잘못 출금할 금액 입력 횟수, 출금 금액
+				System.out.print("출금할 계좌번호 입력 : ");
+				String acc_num = sc.next();
+				if ( a[cnt1].getAcc_Num().equals(acc_num)) {
+					System.out.print("출금 금액 입력 : ");
+					money = sc.nextInt();
+					if ( money > a[cnt1].getNowMoney() || money < 0 ) {
+						System.out.println("출금할 금액이 올바르지 않습니다.\n");
+						continue;
+					}
+					a[cnt1].withdraw(money);						//출금
+					System.out.println();
+				}
+			} else if ( menu == 4 ) {
+				//현재 생성된 계좌 모두의 계좌 상태를 출력
+				for ( int i = 0; i < cnt1+1; i++) {
+					System.out.println(a[i].toString());
+				}
+				System.out.println();
+			}
+			else if ( menu == 0 ) {
+				System.out.println("종료되었습니다.");
+				break;
+			}
+		}
+	}
+}
